@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/SharedSpatialAnchors/Scenes/SharedSpatialAnchors.unity
     guid: aa837f322991b3946908831c850aeb5e
   - enabled: 1
-    path: Assets/SceneSharing/Scenes/SharedSpatialAnchorsWithScene.unity
+    path: Assets/SceneSharing/Scenes/JackScene.unity
     guid: 54a9bc56340b898409d0a7bd0cca36d6
   - enabled: 0
     path: Assets/CoLocation/Scenes/CoLocatedSafety.unity

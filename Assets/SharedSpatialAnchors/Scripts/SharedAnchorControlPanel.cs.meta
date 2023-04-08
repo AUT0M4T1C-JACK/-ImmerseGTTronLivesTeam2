@@ -3,7 +3,18 @@ guid: 91791d25352446c4ab2720cc5432d82c
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - referencePoint: {instanceID: 0}
+  - cubePrefab: {instanceID: 0}
+  - spawnPoint: {instanceID: 0}
+  - anchorIcon: {instanceID: 0}
+  - pageText: {instanceID: 0}
+  - statusText: {instanceID: 0}
+  - renderStyleText: {instanceID: 0}
+  - roomText: {instanceID: 0}
+  - userText: {instanceID: 0}
+  - playerCapsulePrefab: {fileID: 1375922198137286056, guid: 5a667e648b6321b45acd741f8019c448, type: 3}
+  - headset: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
