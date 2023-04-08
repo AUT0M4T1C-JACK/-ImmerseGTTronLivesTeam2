@@ -13,6 +13,7 @@ TagManager:
   - P2Hitbox
   - ScoreManager
   - AudioManager
+  - Holster
   layers:
   - Default
   - TransparentFX

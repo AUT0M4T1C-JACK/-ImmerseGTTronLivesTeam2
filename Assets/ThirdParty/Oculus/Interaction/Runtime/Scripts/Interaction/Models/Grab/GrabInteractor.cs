@@ -53,6 +53,8 @@ namespace Oculus.Interaction
         private GrabInteractable _selectedInteractableOverride;
         private bool _isSelectionOverriden = false;
 
+        [SerializeField] private GameObject holster;
+
         protected override void Awake()
         {
             base.Awake();
@@ -65,6 +67,8 @@ namespace Oculus.Interaction
             this.BeginStart(ref _started, () => base.Start());
             this.AssertField(Selector, nameof(Selector));
             this.AssertField(Rigidbody, nameof(Rigidbody));
+
+            GameObject holster = GameObject.FindWithTag("Holster");
 
             _colliders = Rigidbody.GetComponentsInChildren<Collider>();
 
@@ -179,10 +183,33 @@ namespace Oculus.Interaction
         {
             base.InteractableUnselected(interactable);
 
+            HolsterWeapon(interactable);
+
+            /*
             ReleaseVelocityInformation throwVelocity = VelocityCalculator != null ?
                 VelocityCalculator.CalculateThrowVelocity(interactable.transform) :
                 new ReleaseVelocityInformation(Vector3.zero, Vector3.zero, Vector3.zero);
             interactable.ApplyVelocities(throwVelocity.LinearVelocity, throwVelocity.AngularVelocity);
+            */
+        }
+
+        private void HolsterWeapon(GrabInteractable interactable) {
+
+            float distanceToHolster = Vector3.Distance(interactable.transform.position, holster.transform.position);
+
+            if (distanceToHolster < .25f) {
+                interactable.transform.rotation = holster.transform.GetChild(0).transform.rotation;
+                interactable.transform.position = holster.transform.GetChild(0).transform.position;
+            
+                interactable.GetComponent<Rigidbody>().isKinematic = true;
+                interactable.transform.parent = holster.transform;
+            } else {
+                interactable.GetComponent<Rigidbody>().isKinematic = false;
+                ReleaseVelocityInformation throwVelocity = VelocityCalculator != null ?
+                    VelocityCalculator.CalculateThrowVelocity(interactable.transform) :
+                    new ReleaseVelocityInformation(Vector3.zero, Vector3.zero, Vector3.zero);
+                interactable.ApplyVelocities(throwVelocity.LinearVelocity, throwVelocity.AngularVelocity);
+            }
         }
 
         protected override void HandlePointerEventRaised(PointerEvent evt)
