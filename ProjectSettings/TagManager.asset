@@ -4,7 +4,15 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Headset
+  - RoomLight
+  - Bullet
+  - SamplesInfoPanel
+  - Player1
+  - Player2
+  - P1Hitbox
+  - P2Hitbox
+  - ScoreManager
+  - AudioManager
   layers:
   - Default
   - TransparentFX
