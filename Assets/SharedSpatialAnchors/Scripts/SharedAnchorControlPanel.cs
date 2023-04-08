@@ -68,6 +68,16 @@ public class SharedAnchorControlPanel : MonoBehaviour
         get { return userText; }
     }
 
+        [SerializeField]
+    private GameObject playerCapsulePrefab;
+
+    [SerializeField]
+    private Transform headset;
+
+    private GameObject playerCapsule;
+
+    private Quaternion zeroQuaternion = new Quaternion(0, 0, 0, 0);
+
     private bool _isCreateMode;
 
     private void Start()
@@ -84,6 +94,11 @@ public class SharedAnchorControlPanel : MonoBehaviour
     private void Update()
     {
         statusText.text = "Status: " + PhotonNetwork.NetworkClientState;
+        if (playerCapsule != null)
+        {
+            playerCapsule.transform.position = headset.position;
+            playerCapsule.transform.rotation = zeroQuaternion;
+        }
     }
 
     public void OnCreateModeButtonPressed()
@@ -120,6 +135,7 @@ public class SharedAnchorControlPanel : MonoBehaviour
         SampleController.Instance.Log("OnSpawnCubeButtonPressed");
 
         SpawnCube();
+        SpawnPlayerCapsule();
     }
 
     public void LogNext()
@@ -149,6 +165,12 @@ public class SharedAnchorControlPanel : MonoBehaviour
         var networkedCube = PhotonNetwork.Instantiate(cubePrefab.name, spawnPoint.position, spawnPoint.rotation);
         var photonGrabbable = networkedCube.GetComponent<PhotonGrabbableObject>();
         photonGrabbable.TransferOwnershipToLocalPlayer();
+    }
+ 
+    private void SpawnPlayerCapsule()
+    {
+        Transform transform = gameObject.GetComponent<Transform>();
+        playerCapsule = PhotonNetwork.Instantiate(playerCapsulePrefab.name, headset.position, new Quaternion(0, 0, 0, 0));
     }
 
     public void ChangeUserPassthroughVisualization()
