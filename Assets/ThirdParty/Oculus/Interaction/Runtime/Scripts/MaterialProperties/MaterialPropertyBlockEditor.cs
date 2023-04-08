@@ -65,50 +65,26 @@ namespace Oculus.Interaction
 
         public List<Renderer> Renderers
         {
-            get
-            {
-                return _renderers;
-            }
-            set
-            {
-                _renderers = value;
-            }
+            get { return _renderers; }
+            set { _renderers = value; }
         }
 
         public List<MaterialPropertyVector> VectorProperties
         {
-            get
-            {
-                return _vectorProperties;
-            }
-            set
-            {
-                _vectorProperties = value;
-            }
+            get { return _vectorProperties; }
+            set { _vectorProperties = value; }
         }
 
         public List<MaterialPropertyColor> ColorProperties
         {
-            get
-            {
-                return _colorProperties;
-            }
-            set
-            {
-                _colorProperties = value;
-            }
+            get { return _colorProperties; }
+            set { _colorProperties = value; }
         }
 
         public List<MaterialPropertyFloat> FloatProperties
         {
-            get
-            {
-                return _floatProperties;
-            }
-            set
-            {
-                _floatProperties = value;
-            }
+            get { return _floatProperties; }
+            set { _floatProperties = value; }
         }
 
         public MaterialPropertyBlock MaterialPropertyBlock
@@ -133,10 +109,7 @@ namespace Oculus.Interaction
                 Renderer renderer = GetComponent<Renderer>();
                 if (renderer != null)
                 {
-                    _renderers = new List<Renderer>()
-                    {
-                        renderer
-                    };
+                    _renderers = new List<Renderer>() { renderer };
                 }
             }
             UpdateMaterialPropertyBlock();

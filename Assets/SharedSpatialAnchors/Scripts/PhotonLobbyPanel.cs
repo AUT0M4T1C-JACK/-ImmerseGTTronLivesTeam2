@@ -8,24 +8,27 @@ using Oculus.Interaction;
 public class PhotonLobbyPanel : MonoBehaviour
 {
     [SerializeField]
-    private GameObject              menuPanel;
+    private GameObject menuPanel;
 
     [SerializeField]
-    private PhotonAnchorManager     anchorManager;
+    private PhotonAnchorManager anchorManager;
 
     [SerializeField]
-    private GameObject              roomLayoutPanel;
+    private GameObject roomLayoutPanel;
 
     [SerializeField]
-    private GameObject              roomLayoutPanelRowPrefab;
+    private GameObject roomLayoutPanelRowPrefab;
 
-    List<GameObject>                lobbyRowList = new List<GameObject>();
-
-    [SerializeField]
-    private PokeInteractable        createRoomPokeInter;
+    List<GameObject> lobbyRowList = new List<GameObject>();
 
     [SerializeField]
-    private PokeInteractable        joinRoomPokeInter;
+    private PokeInteractable createRoomPokeInter;
+
+    [SerializeField]
+    private PokeInteractable joinRoomPokeInter;
+
+    public GameObject hmd;
+    public GameObject playerCapsule;
 
     // Start is called before the first frame update
     void Start()
@@ -37,9 +40,9 @@ public class PhotonLobbyPanel : MonoBehaviour
     void Update()
     {
         //Input for testing without a Quest device - TODO: Remove (omega)
-        if(Input.GetKeyDown(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            OnCreateRoomButtonPressed();           
+            OnCreateRoomButtonPressed();
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
@@ -47,7 +50,7 @@ public class PhotonLobbyPanel : MonoBehaviour
             OnFindRoomButtonPressed();
         }
 
-        if(Input.GetKeyDown(KeyCode.Alpha3))
+        if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             if (lobbyRowList.Count > 0)
             {
@@ -85,8 +88,11 @@ public class PhotonLobbyPanel : MonoBehaviour
 
     public void OnFindRoomButtonPressed()
     {
-        if (PhotonPun.PhotonNetwork.IsConnected){
-            SampleController.Instance.Log("There are currently " + lobbyRowList.Count + " rooms in the lobby");
+        if (PhotonPun.PhotonNetwork.IsConnected)
+        {
+            SampleController.Instance.Log(
+                "There are currently " + lobbyRowList.Count + " rooms in the lobby"
+            );
             roomLayoutPanel.SetActive(true);
         }
         else
@@ -114,26 +120,30 @@ public class PhotonLobbyPanel : MonoBehaviour
         anchorManager.JoinRoomFromLobby(roomName);
 
         menuPanel.SetActive(true);
+        PhotonNetwork.Instantiate(playerCapsule.name, hmd);
         gameObject.SetActive(false);
     }
 
     public void SetRoomList(List<PhotonRealtime.RoomInfo> roomList)
     {
-        foreach(Transform roomTransform in roomLayoutPanel.transform)
+        foreach (Transform roomTransform in roomLayoutPanel.transform)
         {
-            if(roomTransform.gameObject != roomLayoutPanelRowPrefab)
+            if (roomTransform.gameObject != roomLayoutPanelRowPrefab)
                 GameObject.Destroy(roomTransform.gameObject);
         }
         lobbyRowList.Clear();
 
-        if(roomList.Count > 0)
+        if (roomList.Count > 0)
         {
-            for(int i = 0; i < roomList.Count; i++)
+            for (int i = 0; i < roomList.Count; i++)
             {
                 if (roomList[i].PlayerCount == 0)
                     continue;
 
-                GameObject newLobbyRow = GameObject.Instantiate(roomLayoutPanelRowPrefab, roomLayoutPanel.transform);
+                GameObject newLobbyRow = GameObject.Instantiate(
+                    roomLayoutPanelRowPrefab,
+                    roomLayoutPanel.transform
+                );
                 newLobbyRow.SetActive(true);
                 newLobbyRow.GetComponent<PhotonLobbyRow>().SetRowText(roomList[i].Name);
                 lobbyRowList.Add(newLobbyRow);
@@ -159,17 +169,29 @@ public class PhotonLobbyPanel : MonoBehaviour
         if (createRoomPokeInter)
         {
             createRoomPokeInter.enabled = false;
-            TMPro.TextMeshPro buttonText = createRoomPokeInter.GetComponentInChildren<TMPro.TextMeshPro>();
+            TMPro.TextMeshPro buttonText =
+                createRoomPokeInter.GetComponentInChildren<TMPro.TextMeshPro>();
             if (buttonText)
-                buttonText.color = new Color(buttonText.color.r, buttonText.color.g, buttonText.color.b, 0.25f);
+                buttonText.color = new Color(
+                    buttonText.color.r,
+                    buttonText.color.g,
+                    buttonText.color.b,
+                    0.25f
+                );
         }
 
         if (joinRoomPokeInter)
         {
             joinRoomPokeInter.enabled = false;
-            TMPro.TextMeshPro buttonText = joinRoomPokeInter.GetComponentInChildren<TMPro.TextMeshPro>();
+            TMPro.TextMeshPro buttonText =
+                joinRoomPokeInter.GetComponentInChildren<TMPro.TextMeshPro>();
             if (buttonText)
-                buttonText.color = new Color(buttonText.color.r, buttonText.color.g, buttonText.color.b, 0.25f);
+                buttonText.color = new Color(
+                    buttonText.color.r,
+                    buttonText.color.g,
+                    buttonText.color.b,
+                    0.25f
+                );
         }
     }
 
@@ -184,7 +206,8 @@ public class PhotonLobbyPanel : MonoBehaviour
         if (createRoomPokeInter)
         {
             createRoomPokeInter.enabled = true;
-            TMPro.TextMeshPro buttonText = createRoomPokeInter.GetComponentInChildren<TMPro.TextMeshPro>();
+            TMPro.TextMeshPro buttonText =
+                createRoomPokeInter.GetComponentInChildren<TMPro.TextMeshPro>();
             if (buttonText)
                 buttonText.color = Color.white;
         }
@@ -192,7 +215,8 @@ public class PhotonLobbyPanel : MonoBehaviour
         if (joinRoomPokeInter)
         {
             joinRoomPokeInter.enabled = true;
-            TMPro.TextMeshPro buttonText = joinRoomPokeInter.GetComponentInChildren<TMPro.TextMeshPro>();
+            TMPro.TextMeshPro buttonText =
+                joinRoomPokeInter.GetComponentInChildren<TMPro.TextMeshPro>();
             if (buttonText)
                 buttonText.color = Color.white;
         }
