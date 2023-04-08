@@ -1,17 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using Oculus.Interaction;
 
 public class PhotonThowableObject : PhotonGrabbableObject
 {
     private Transform trackingSpace;
 
+    public throwEvent throwE;
+    public grabEvent grabE;
+
+    [System.Serializable]
+    public class throwEvent : UnityEvent<Vector3> { }
+
+    [System.Serializable]
+    public class grabEvent : UnityEvent<Vector3> { }
+
     private void Start()
     {
         GameObject trackingSpaceObj = GameObject.Find("TrackingSpace");
         if (trackingSpaceObj)
             trackingSpace = trackingSpaceObj.transform;
+
+        if (throwE == null)
+        {
+            throwE = new throwEvent();
+        }
+
+        if (grabE == null)
+        {
+            grabE = new grabEvent();
+        }
     }
 
     override public void OnPointerEventRaised(PointerEvent pointerEvent)
@@ -24,6 +44,8 @@ public class PhotonThowableObject : PhotonGrabbableObject
                     SampleController.Instance.Log("Grabbable object grabbed");
 
                     TransferOwnershipToLocalPlayer();
+
+                    grabE.Invoke(Vector3.zero);
                 }
                 break;
             case PointerEventType.Unselect:
@@ -35,18 +57,28 @@ public class PhotonThowableObject : PhotonGrabbableObject
                     {
                         Rigidbody objectRigidbody = GetComponent<Rigidbody>();
 
-                        Vector3 vRightVelocity = trackingSpace.rotation * OVRInput.GetLocalControllerVelocity(OVRInput.Controller.RTouch);
-                        Vector3 vLeftVelocity = trackingSpace.rotation * OVRInput.GetLocalControllerVelocity(OVRInput.Controller.LTouch);
+                        Vector3 vRightVelocity =
+                            trackingSpace.rotation
+                            * OVRInput.GetLocalControllerVelocity(OVRInput.Controller.RTouch);
+                        Vector3 vLeftVelocity =
+                            trackingSpace.rotation
+                            * OVRInput.GetLocalControllerVelocity(OVRInput.Controller.LTouch);
 
                         if (vRightVelocity.magnitude > vLeftVelocity.magnitude)
                         {
                             objectRigidbody.velocity = vRightVelocity;
-                            objectRigidbody.angularVelocity = OVRInput.GetLocalControllerAngularVelocity(OVRInput.Controller.RTouch);
+                            //objectRigidbody.angularVelocity = OVRInput.GetLocalControllerAngularVelocity(OVRInput.Controller.RTouch);
+                            throwE.Invoke(
+                                OVRInput.GetLocalControllerPosition(OVRInput.Controller.RTouch)
+                            );
                         }
                         else
                         {
                             objectRigidbody.velocity = vLeftVelocity;
-                            objectRigidbody.angularVelocity = OVRInput.GetLocalControllerAngularVelocity(OVRInput.Controller.LTouch);
+                            //objectRigidbody.angularVelocity = OVRInput.GetLocalControllerAngularVelocity(OVRInput.Controller.LTouch);
+                            throwE.Invoke(
+                                OVRInput.GetLocalControllerPosition(OVRInput.Controller.LTouch)
+                            );
                         }
                     }
                 }
