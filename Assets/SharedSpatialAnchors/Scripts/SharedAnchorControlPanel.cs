@@ -134,8 +134,9 @@ public class SharedAnchorControlPanel : MonoBehaviour
     {
         SampleController.Instance.Log("OnSpawnCubeButtonPressed");
 
-        SpawnCube();
         SpawnPlayerCapsule();
+        SpawnOrAttachScore();
+        SpawnCube();
     }
 
     public void LogNext()
@@ -171,6 +172,10 @@ public class SharedAnchorControlPanel : MonoBehaviour
     {
         Transform transform = gameObject.GetComponent<Transform>();
         playerCapsule = PhotonNetwork.Instantiate(playerCapsulePrefab.name, headset.position, new Quaternion(0, 0, 0, 0));
+    }
+
+    private void SpawnOrAttachScore() {
+        
     }
 
     public void ChangeUserPassthroughVisualization()

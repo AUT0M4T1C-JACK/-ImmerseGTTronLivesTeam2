@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using Oculus.Interaction;
+using Photon.Pun;
 
 public class PhotonThowableObject : PhotonGrabbableObject
 {
@@ -36,6 +37,10 @@ public class PhotonThowableObject : PhotonGrabbableObject
 
     override public void OnPointerEventRaised(PointerEvent pointerEvent)
     {
+        if (!this.GetComponent<PhotonView>().IsMine) {
+            SampleController.Instance.Log("This is not mine!");
+            return;
+        }    
         switch (pointerEvent.Type)
         {
             case PointerEventType.Select:

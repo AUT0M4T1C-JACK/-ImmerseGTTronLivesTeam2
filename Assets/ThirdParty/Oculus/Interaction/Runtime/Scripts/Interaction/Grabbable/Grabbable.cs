@@ -92,6 +92,8 @@ namespace Oculus.Interaction
 
         public override void ProcessPointerEvent(PointerEvent evt)
         {
+
+
             switch (evt.Type)
             {
                 case PointerEventType.Select:

@@ -52,7 +52,7 @@ public class DiscScript : MonoBehaviour
 
         if (returning)
         {
-            targetDirection = targetVector - transform.position; // Save direction // Normalize target direction vector
+            targetDirection = targetTransform.position - transform.position; // Save direction // Normalize target direction vector
 
             rb.AddForce(targetDirection.normalized * (rb.mass * throwSpeed) / 0.75f);
         }
@@ -72,6 +72,7 @@ public class DiscScript : MonoBehaviour
             returning = true;
             thrown = true;
             targetVector = handPos;
+            targetTransform = Camera.main.transform;
             startingTime = Time.time;
             polling = true;
             SampleController.Instance.Log(((rb.mass * throwSpeed) / 0.75f).ToString());
@@ -82,5 +83,15 @@ public class DiscScript : MonoBehaviour
     {
         returning = false;
         thrown = false;
+    }
+
+    private void OnTriggerEnter(Collider other) {
+        
+        if(other.CompareTag("DiskPlane")) {
+            returning = false;
+            thrown = false;
+            rb.velocity = Vector3.zero;
+            this.transform.position = Camera.main.transform.position;
+        }
     }
 }

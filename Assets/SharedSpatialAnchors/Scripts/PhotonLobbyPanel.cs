@@ -120,7 +120,6 @@ public class PhotonLobbyPanel : MonoBehaviour
         anchorManager.JoinRoomFromLobby(roomName);
 
         menuPanel.SetActive(true);
-        PhotonNetwork.Instantiate(playerCapsule.name, hmd);
         gameObject.SetActive(false);
     }
 

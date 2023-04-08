@@ -14,6 +14,7 @@ TagManager:
   - ScoreManager
   - AudioManager
   - Holster
+  - DiskPlane
   layers:
   - Default
   - TransparentFX
