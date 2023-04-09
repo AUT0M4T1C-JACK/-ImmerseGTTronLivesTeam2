@@ -91,7 +91,7 @@ public class DiscScript : MonoBehaviour
             bounceCount++;
         }
 
-        if (bounceCount == 3)
+        if (bounceCount == 4)
         {
             returning = false;
             thrown = false;
