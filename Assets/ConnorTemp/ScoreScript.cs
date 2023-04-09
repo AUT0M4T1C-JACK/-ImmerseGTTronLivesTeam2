@@ -2,23 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-//using PhotonNetwork;
+using Photon.Realtime;
+// using PhotonNetwork;
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
-
-
 
 public class ScoreScript : MonoBehaviour
 {
-    [SerializeField] private ParticleSystem particles;
-    //[SerializeField] private ScoreManager sm;
-    [SerializeField] private AudioManager am;
+    [SerializeField]
+    private ParticleSystem particles;
 
-    [SerializeField] private Text scoreText;
-    [SerializeField] private float scoreCooldown = .5f;
+    //[SerializeField] private ScoreManager sm;
+    [SerializeField]
+    private AudioManager am;
+
+    [SerializeField]
+    private Text scoreText;
+
+    [SerializeField]
+    private float scoreCooldown = .5f;
     private float nextScore;
-    
-    
+
+    private Player owner;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,52 +33,78 @@ public class ScoreScript : MonoBehaviour
         particles = GetComponentInChildren<ParticleSystem>();
         am = GetComponentInChildren<AudioManager>();
         scoreText = GetComponentInChildren<Text>();
-
+        nextScore = 0.0f;
+        owner = PhotonNetwork.LocalPlayer;
         resetScore();
 
         //PhotonNetwork.LocalPlayer.SetScore(0);
     }
 
+    public void increaseScore()
+    {
+        if (!this.GetComponent<PhotonView>().IsMine) {
+            return;
+        }
 
-    public void increaseScore() {
-        int pScore = (int) PhotonNetwork.LocalPlayer.CustomProperties["Score"];
-        pScore++;
-        Hashtable hash = new Hashtable();
-        hash.Add("Score", pScore);
-        PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
-        //updateScoreText();
-    }
-
-    public void resetScore() {
-        int pScore = 0;
-        Hashtable hash = new Hashtable();
-        hash.Add("Score", pScore);
-        PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+        // int pScore = (int)PhotonNetwork.LocalPlayer.CustomProperties["Score"];
+        // pScore++;
+        // Hashtable hash = new Hashtable();
+        // hash.Add("Score", pScore);
+        // PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+        PhotonNetwork.LocalPlayer.AddScore(1);
 
         //updateScoreText();
     }
 
-    private void updateScoreText() {
+    public void resetScore()
+    {
+        // int pScore = 0;
+        // Hashtable hash = new Hashtable();
+        // hash.Add("Score", pScore);
+        // PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+
+        PhotonNetwork.LocalPlayer.SetScore(0);
+
+        //updateScoreText();
+    }
+
+    private void updateScoreText()
+    {
         //scoreText.text = PhotonNetwork.LocalPlayer.customProperties.get("Score") + " | " + PhotonNetwork.LocalPlayer.customProperties("Score");
         //scoreText.text = PhotonNetwork.LocalPlayer.CustomProperties["Score"] + " | " + PhotonNetwork.LocalPlayer.customProperties("Score");
-        if (PhotonNetwork.PlayerList[0] != null && PhotonNetwork.PlayerList[1] != null) {
-            scoreText.text = PhotonNetwork.PlayerList[0].CustomProperties["Score"].ToString()  + " | " + PhotonNetwork.PlayerList[1].CustomProperties["Score"].ToString();
+        if (PhotonNetwork.PlayerList[0] != null && PhotonNetwork.PlayerList[1] != null)
+        {
+            scoreText.text =
+                PhotonNetwork.PlayerList[0].GetScore().ToString()
+                + " | "
+                + PhotonNetwork.PlayerList[1].GetScore().ToString();
         }
     }
 
-    public float getCooldown() {
+    public float getCooldown()
+    {
         return nextScore;
     }
 
-    public void updateCooldown() {
+    public void updateCooldown()
+    {
+
         nextScore = Time.time + scoreCooldown;
     }
 
-    private void OnTriggerEnter(Collider other) {
+    private void OnTriggerEnter(Collider other)
+    {
+
+        if (!this.GetComponent<PhotonView>().IsMine) {
+            return;
+        }
+        
         //Debug.Log("Hit");
-        if (Time.time > getCooldown()) {
+        if (Time.time > getCooldown())
+        {
             //if (this.tag == "Player1" && hitbox.tag == "P2Hitbox") {
-            if (!other.GetComponent<PhotonView>().IsMine) { // && PhotonNetwork.LocalPlayer.ActorNumber == 1) {
+            if (!other.transform.parent.GetComponent<PhotonView>().IsMine)
+            { // && PhotonNetwork.LocalPlayer.ActorNumber == 1) {
                 particles.Play();
                 increaseScore();
                 updateCooldown();
@@ -80,17 +113,18 @@ public class ScoreScript : MonoBehaviour
                 //sm.updateCooldown();
                 //PhotonNetwork.player.SetScore(int value);
                 //PhotonNetwork.AddScore(player, int value);
-            //} else if (this.tag == "Player2" && hitbox.tag == "P1Hitbox") {
+                //} else if (this.tag == "Player2" && hitbox.tag == "P1Hitbox") {
             } //else if (!other.GetComponent<PhotonView>.isMine) { //} && PhotonNetwork.LocalPlayer.ActorNumber == 2) {
-                //particles.Play();
-                //sm.increaseP2Score();
-                //sm.updateCooldown();
-                //am.PlayHitSFX();
+            //particles.Play();
+            //sm.increaseP2Score();
+            //sm.updateCooldown();
+            //am.PlayHitSFX();
             //}
         }
     }
 
-    private void FixedUpdate() {
+    private void FixedUpdate()
+    {
         updateScoreText();
     }
 }

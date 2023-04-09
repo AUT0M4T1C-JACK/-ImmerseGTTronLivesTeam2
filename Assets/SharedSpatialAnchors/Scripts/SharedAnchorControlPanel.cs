@@ -60,6 +60,8 @@ public class SharedAnchorControlPanel : MonoBehaviour
         get {  return roomText; }
     }
 
+    public GameObject menu;
+
     [SerializeField]
     private TextMeshProUGUI userText;
 
@@ -135,8 +137,8 @@ public class SharedAnchorControlPanel : MonoBehaviour
         SampleController.Instance.Log("OnSpawnCubeButtonPressed");
 
         SpawnPlayerCapsule();
-        SpawnOrAttachScore();
         SpawnCube();
+        menu.SetActive(false);
     }
 
     public void LogNext()
@@ -172,10 +174,6 @@ public class SharedAnchorControlPanel : MonoBehaviour
     {
         Transform transform = gameObject.GetComponent<Transform>();
         playerCapsule = PhotonNetwork.Instantiate(playerCapsulePrefab.name, headset.position, new Quaternion(0, 0, 0, 0));
-    }
-
-    private void SpawnOrAttachScore() {
-        
     }
 
     public void ChangeUserPassthroughVisualization()

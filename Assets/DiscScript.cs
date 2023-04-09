@@ -18,11 +18,12 @@ public class DiscScript : MonoBehaviour
     public Transform targetTransform;
     public Vector3 targetVector;
 
+    public ParticleSystem particles;
+
     private float startingTime;
 
     public float distance;
-
-    public bool polling = false;
+    public int bounceCount;
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +31,7 @@ public class DiscScript : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         thrown = false;
         returning = false;
+        bounceCount = 0;
         this.GetComponent<PhotonThowableObject>().throwE.AddListener(Throw);
         this.GetComponent<PhotonThowableObject>().grabE.AddListener(Catch);
     }
@@ -37,22 +39,9 @@ public class DiscScript : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        // distance = Vector3.Distance(targetVector, this.transform.position);
-        // if (distance > 5 && polling)
-        // {
-        //     rb.velocity = Vector3.zero;
-        //     polling = false;
-        //     ReturnDisc();
-        // }
-
-        // if (rb.velocity != Vector3.zero)
-        // {
-        //     this.transform.rotation = Quaternion.LookRotation(rb.velocity, Vector3.up);
-        // }
-
         if (returning)
         {
-            targetDirection = targetTransform.position - transform.position; // Save direction // Normalize target direction vector
+            targetDirection = targetVector - transform.position; // Save direction // Normalize target direction vector
 
             rb.AddForce(targetDirection.normalized * (rb.mass * throwSpeed) / 0.75f);
         }
@@ -73,9 +62,6 @@ public class DiscScript : MonoBehaviour
             thrown = true;
             targetVector = handPos;
             targetTransform = Camera.main.transform;
-            startingTime = Time.time;
-            polling = true;
-            SampleController.Instance.Log(((rb.mass * throwSpeed) / 0.75f).ToString());
         }
     }
 
@@ -83,15 +69,35 @@ public class DiscScript : MonoBehaviour
     {
         returning = false;
         thrown = false;
+        bounceCount = 0;
     }
 
-    private void OnTriggerEnter(Collider other) {
-        
-        if(other.CompareTag("DiskPlane")) {
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("DiskPlane"))
+        {
             returning = false;
             thrown = false;
             rb.velocity = Vector3.zero;
             this.transform.position = Camera.main.transform.position;
+        }
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.CompareTag("Wall"))
+        {
+            particles.Play();
+            bounceCount++;
+        }
+
+        if (bounceCount == 3)
+        {
+            returning = false;
+            thrown = false;
+            rb.velocity = Vector3.zero;
+            this.transform.position =
+                Camera.main.transform.position + Camera.main.transform.forward * 0.4f;
         }
     }
 }
