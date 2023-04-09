@@ -6,7 +6,7 @@ public class AudioManager : MonoBehaviour
 {
     //[SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioSource[] audioSources;
-    public AudioClip sfxHum, sfxHit, sfxCharge;
+    public AudioClip sfxDerezz, sfxBounce, sfxIdle, sfxOn, sfxThrow;
     //audioSource[0] == sfx
     //audioSource[1] == hum
 
@@ -16,22 +16,32 @@ public class AudioManager : MonoBehaviour
     {
         //audioSource = GetComponent<AudioSource>();
         audioSources = GetComponents<AudioSource>();
-        PlayChargeSFX(); //PLAY WHEN TAKEN OFF BACK
-        PlayHumSFX(); //PLAY WHEN TAKEN OFF BACK
+        //PlayChargeSFX(); //PLAY WHEN TAKEN OFF BACK
+        //PlayHumSFX(); //PLAY WHEN TAKEN OFF BACK
     }
 
-    public void PlayHitSFX() {
-        audioSources[0].clip = sfxHit;
+    public void PlayDerezzSFX() {
+        audioSources[0].clip = sfxDerezz;
         audioSources[0].Play();
     }
 
-    public void PlayHumSFX() {
-        audioSources[1].clip = sfxHum;
+    public void PlayBounceSFX() {
+        audioSources[0].clip = sfxBounce;
+        audioSources[0].Play();
+    }
+
+    public void PlayIdleSFX() {
+        audioSources[1].clip = sfxIdle;
         audioSources[1].Play();
     }
 
-    public void PlayChargeSFX() {
-        audioSources[0].clip = sfxCharge;
+    public void PlayOnSFX() {
+        audioSources[0].clip = sfxOn;
+        audioSources[0].Play();
+    }
+
+    public void PlayThrowSFX() {
+        audioSources[0].clip = sfxOn;
         audioSources[0].Play();
     }
 
