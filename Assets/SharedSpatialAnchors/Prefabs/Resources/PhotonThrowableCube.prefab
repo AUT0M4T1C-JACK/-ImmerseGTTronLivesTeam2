@@ -256,6 +256,7 @@ MonoBehaviour:
   particles: {fileID: 3982706053287585549}
   distance: 0
   bounceCount: 0
+  am: {fileID: 0}
 --- !u!114 &2301974494688000401
 MonoBehaviour:
   m_ObjectHideFlags: 0
