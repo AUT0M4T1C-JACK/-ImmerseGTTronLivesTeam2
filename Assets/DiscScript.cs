@@ -25,15 +25,21 @@ public class DiscScript : MonoBehaviour
     public float distance;
     public int bounceCount;
 
+    [SerializeField]
+    private AudioManager am;
+
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        am = GetComponentInChildren<AudioManager>();
         thrown = false;
         returning = false;
         bounceCount = 0;
         this.GetComponent<PhotonThowableObject>().throwE.AddListener(Throw);
         this.GetComponent<PhotonThowableObject>().grabE.AddListener(Catch);
+        am.PlayOnSFX();
+        am.PlayIdleSFX();
     }
 
     // Update is called once per frame
@@ -62,6 +68,7 @@ public class DiscScript : MonoBehaviour
             thrown = true;
             targetVector = handPos;
             targetTransform = Camera.main.transform;
+            am.PlayThrowSFX();
         }
     }
 
@@ -70,6 +77,7 @@ public class DiscScript : MonoBehaviour
         returning = false;
         thrown = false;
         bounceCount = 0;
+        //am.Play
     }
 
     private void OnTriggerEnter(Collider other)
@@ -89,6 +97,7 @@ public class DiscScript : MonoBehaviour
         {
             particles.Play();
             bounceCount++;
+            am.PlayBounceSFX();
         }
 
         if (bounceCount == 4)

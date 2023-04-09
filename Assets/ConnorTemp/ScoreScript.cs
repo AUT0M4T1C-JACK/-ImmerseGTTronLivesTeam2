@@ -108,7 +108,8 @@ public class ScoreScript : MonoBehaviour
                 particles.Play();
                 increaseScore();
                 updateCooldown();
-                am.PlayHitSFX();
+                am.PlayDerezzSFX();
+                //am.PlayHitSFX();
                 //sm.increaseP1Score();
                 //sm.updateCooldown();
                 //PhotonNetwork.player.SetScore(int value);

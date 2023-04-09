@@ -6193,9 +6193,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSources: []
-  sfxHum: {fileID: 8300000, guid: 316f3a7736adb48b6bb0c68dfdeebffb, type: 3}
-  sfxHit: {fileID: 8300000, guid: 45fe38a0e089349eaa7f3727f87395c0, type: 3}
-  sfxCharge: {fileID: 8300000, guid: 21002de7e21b24e58ae2ab50bb2d6415, type: 3}
+  sfxDerezz: {fileID: 8300000, guid: 55164f37844fe4b2b875de75a8d54191, type: 3}
+  sfxBounce: {fileID: 8300000, guid: 403cb420e9a2c466b96127c6691a791a, type: 3}
+  sfxIdle: {fileID: 8300000, guid: c476c0a950f1a4f5e96f8be84a572e42, type: 3}
+  sfxOn: {fileID: 8300000, guid: dfd37dab6edf44d6e876821ab5f6dce2, type: 3}
+  sfxThrow: {fileID: 8300000, guid: 962108b6a80a34e4880b65ed7b3af1a5, type: 3}
 --- !u!82 &6592555344219111094
 AudioSource:
   m_ObjectHideFlags: 0
